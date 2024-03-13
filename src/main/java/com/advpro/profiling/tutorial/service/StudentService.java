@@ -30,16 +30,11 @@ public class StudentService {
     }
 
     public Optional<Student> findStudentWithHighestGpa() {
-        List<Student> students = studentRepository.findAll();
-        Student highestGpaStudent = null;
-        double highestGpa = 0.0;
-        for (Student student : students) {
-            if (student.getGpa() > highestGpa) {
-                highestGpa = student.getGpa();
-                highestGpaStudent = student;
-            }
-        }
-        return Optional.ofNullable(highestGpaStudent);
+        List<Sort.Order> sort = new ArrayList<>();
+        sort.add(new Sort.Order(Sort.Direction.DESC, "gpa"));
+        List<Student> students = studentRepository.findAll(Sort.by(sort));
+        Student highestGpa = students.get(0);
+        return Optional.ofNullable(highestGpa);
     }
 
     public String joinStudentNames() {
